@@ -3,6 +3,9 @@ import * as ReactDOM from "react-dom";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { hot } from "react-hot-loader/root";
+import TuitionList from "./tuition/TuitionList";
+import { Provider } from "react-redux";
+import store from "./store";
 // import "./style.scss";
 const c = (e: React.MouseEvent<HTMLButtonElement>) => {
   console.log("clicked", e);
@@ -10,8 +13,13 @@ const c = (e: React.MouseEvent<HTMLButtonElement>) => {
 const App = () => {
   return (
     <div>
-      Hello World
-      <button onClick={c}>Click</button>
+      <Provider store={store}>
+        <div>
+          <p>Hello World</p>
+          <button onClick={c}>Click</button>
+          <TuitionList />
+        </div>
+      </Provider>
     </div>
   );
 };
