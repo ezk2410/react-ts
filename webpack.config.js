@@ -38,9 +38,11 @@ const prodPlugins = [
     new BundleAnalyzerPlugin(),
 ];
 const devServer = {
+    publicPath: "/",
     contentBase: PATHS.appBuild,
     port: 8000,
     hot: true,
+    historyApiFallback: true,
 };
 const optimization = {
     minimize: true,
@@ -147,6 +149,7 @@ const WEBPACK_CONFIG = {
         filename: IS_PROD ? '[name].[contenthash:8].js' : '[name].js',
         chunkFilename: IS_PROD ? '[name].[contenthash:8].chunk.js' : '[name].chunk.js',
         path: PATHS.appBuild,
+        publicPath: "/"
     },
     module: loaders,
     plugins: IS_PROD ? prodPlugins : devPlugins,
