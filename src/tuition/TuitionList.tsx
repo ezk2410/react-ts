@@ -35,7 +35,7 @@ const TuitionList = ({ tuitionList, fetchTuition }: Props) => {
         </ul>
       </div>
     );
-  return <div>Loading...</div>;
+  return <div>Loading....</div>;
 };
 const mapState = (state: RootState): StateProps => ({
   tuitionList: state.tuition.list,

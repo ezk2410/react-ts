@@ -1,23 +1,32 @@
-import { put, call, takeLatest } from "redux-saga/effects";
 import { ACTION_TYPE } from "./types";
 import { tuitionListService } from "./service";
-
-export function* fetchTuitionList() {
-  try {
-    const tuitionList = yield call(tuitionListService);
-    yield put({ type: ACTION_TYPE.TUITION_LIST_LOADED, payload: tuitionList });
-  } catch (e) {
-    yield put({
-      type: ACTION_TYPE.TUITION_LIST_ERRORED,
-      payload: e.toString(),
-    });
-  }
+import { Dispatch, Action } from "redux";
+import { ThunkAction } from "redux-thunk";
+import { RootState } from "../store";
+export function fetchTuitionListAction(): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  Action<string>
+> {
+  return (dispatch: Dispatch) => {
+    dispatch({ type: ACTION_TYPE.TUITION_LIST_FETCH });
+    return tuitionListService()
+      .then((tuitionList) =>
+        dispatch({
+          type: ACTION_TYPE.TUITION_LIST_LOADED,
+          payload: tuitionList,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: ACTION_TYPE.TUITION_LIST_ERRORED,
+          payload: error.toString(),
+        })
+      );
+  };
 }
 
-export function* tuitionSaga() {
-  yield takeLatest(ACTION_TYPE.TUITION_LIST_FETCH, fetchTuitionList);
-}
-
-export function fetchTuitionListAction() {
-  return { type: ACTION_TYPE.TUITION_LIST_FETCH };
-}
+// export function fetchTuitionListAction(): Action<string> {
+//   return { type: ACTION_TYPE.TUITION_LIST_FETCH };
+// }
