@@ -1,22 +1,19 @@
-import { all } from "redux-saga/effects";
-import createSagaMiddleware from "redux-saga";
-import { tuitionSaga } from "./tuition/actions";
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { tuitionReducer } from "./tuition/reducer";
+import thunk from "redux-thunk";
 
 const rootReducer = combineReducers({
   tuition: tuitionReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
-
-function* rootSaga() {
-  yield all([tuitionSaga()]);
-}
-const reduxSagaMiddleware = createSagaMiddleware();
-
-const store = createStore(rootReducer, applyMiddleware(reduxSagaMiddleware));
-
-reduxSagaMiddleware.run(rootSaga);
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers =
+  window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || compose;
+/* eslint-enable */
+const store = createStore(
+  rootReducer,
+  /* preloadedState, */ composeEnhancers(applyMiddleware(thunk))
+);
 
 export default store;
